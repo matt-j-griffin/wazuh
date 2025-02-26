@@ -556,6 +556,9 @@
 /* Sysinfo */
 #define SYSINFO_DYNAMIC_INIT_ERROR                  "(9000): Error loading sysinfo module."
 
+/* BPF helpers*/
+#define BPF_HELPERS_DYNAMIC_INIT_ERROR                  "(9001): Error loading BPF module."
+
 /* Verbose messages */
 #define STARTUP_MSG "Started (pid: %d)."
 #define PRIVSEP_MSG "Chrooted to directory: %s, using user: %s"
