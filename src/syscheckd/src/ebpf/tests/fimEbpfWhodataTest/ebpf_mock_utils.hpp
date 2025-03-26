@@ -18,6 +18,8 @@ public:
     static fimebpf::loggingFunction_t mock_loggingFunction;
     static fimebpf::abspath_t mock_abspath;
     MOCK_METHOD(bool, mock_fim_shutdown_process_on, ());
+    MOCK_METHOD(void, m_fim_whodata_event, (whodata_evt*), ());
+
 
     static MockFimebpf& GetInstance() {
         static MockFimebpf instance;
@@ -28,13 +30,16 @@ public:
         fimebpf::instance().m_fim_configuration_directory = mock_fim_conf;
         fimebpf::instance().m_get_user = mock_get_user;
         fimebpf::instance().m_get_group = mock_get_group;
-        fimebpf::instance().m_fim_whodata_event = mock_fim_whodata_event;
         fimebpf::instance().m_free_whodata_event = mock_free_whodata_event;
         fimebpf::instance().m_loggingFunction = mock_loggingFunction;
         fimebpf::instance().m_abspath = mock_abspath;
         fimebpf::instance().m_fim_shutdown_process_on = []() {
             return MockFimebpf::GetInstance().mock_fim_shutdown_process_on();
         };
+	fimebpf::instance().m_fim_whodata_event = [](whodata_evt* event) {
+            MockFimebpf::GetInstance().m_fim_whodata_event(event);
+        };
+
     }
 };
 

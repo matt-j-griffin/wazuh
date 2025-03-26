@@ -24,8 +24,8 @@ int ebpf_whodata();
 TEST_F(EbpfWhodataTest, SuccessfulRun) {
 
     bpf_helpers->init_ring_buffer = (init_ring_buffer_t)mock_init_ring_buffer_success;
-    bpf_helpers->ebpf_pop_events = (pop_events_t)mock_ebpf_pop_events;
-    bpf_helpers->whodata_pop_events = (pop_events_t)mock_whodata_pop_events;
+    bpf_helpers->ebpf_pop_events = (ebpf_pop_events_t)mock_ebpf_pop_events;
+    bpf_helpers->whodata_pop_events = (whodata_pop_events_t)mock_whodata_pop_events;
     bpf_helpers->ring_buffer_poll = (ring_buffer__poll_t)mock_ring_buffer_poll_success;
     bpf_helpers->ring_buffer_free = (ring_buffer__free_t)mock_ring_buffer_free;
     bpf_helpers->bpf_object_close = (bpf_object__close_t)mock_bpf_object_close;
@@ -51,8 +51,8 @@ TEST_F(EbpfWhodataTest, RingBufferInitError) {
 TEST_F(EbpfWhodataTest, RingBufferPollError) {
 
     bpf_helpers->init_ring_buffer = (init_ring_buffer_t)mock_init_ring_buffer_success;
-    bpf_helpers->ebpf_pop_events = (pop_events_t)mock_ebpf_pop_events;
-    bpf_helpers->whodata_pop_events = (pop_events_t)mock_whodata_pop_events;
+    bpf_helpers->ebpf_pop_events = (ebpf_pop_events_t)mock_ebpf_pop_events;
+    bpf_helpers->whodata_pop_events = (whodata_pop_events_t)mock_whodata_pop_events;
     bpf_helpers->ring_buffer_poll = (ring_buffer__poll_t)mock_ring_buffer_poll_failure;
     bpf_helpers->ring_buffer_free = (ring_buffer__free_t)mock_ring_buffer_free;
     bpf_helpers->bpf_object_close = (bpf_object__close_t)mock_bpf_object_close;
