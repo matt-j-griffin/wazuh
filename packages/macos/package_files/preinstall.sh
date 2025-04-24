@@ -51,10 +51,12 @@ if [ -d "${DIR}" ]; then
     if ${DIR}/bin/wazuh-control status | grep "is running" > /dev/null 2>&1; then
         touch "${DIR}/WAZUH_RESTART"
         ${DIR}/bin/wazuh-control stop
+        launchctl remove com.wazuh.agent
         restart="true"
     elif ${DIR}/bin/ossec-control status | grep "is running" > /dev/null 2>&1; then
         touch "${DIR}/WAZUH_RESTART"
         ${DIR}/bin/ossec-control stop
+        launchctl remove com.wazuh.agent
         restart="true"
     fi
 

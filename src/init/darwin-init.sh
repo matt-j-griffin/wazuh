@@ -12,7 +12,7 @@ STARTUP=/Library/StartupItems/WAZUH/StartupParameters.plist
 LAUNCHER_SCRIPT=/Library/StartupItems/WAZUH/Wazuh-launcher
 STARTUP_SCRIPT=/Library/StartupItems/WAZUH/WAZUH
 
-launchctl unload /Library/LaunchDaemons/com.wazuh.agent.plist 2> /dev/null
+launchctl remove com.wazuh.agent 2> /dev/null
 mkdir -p /Library/StartupItems/WAZUH
 chown root:wheel /Library/StartupItems/WAZUH
 rm -f $STARTUP $STARTUP_SCRIPT $SERVICE
