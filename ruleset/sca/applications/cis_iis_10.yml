@@ -102,7 +102,7 @@ checks:
       - http://learn.iis.net/page.aspx/624/application-pool-identities/
     condition: all
     rules:
-      - 'c:%systemroot%\system32\inetsrv\appcmd list app -> r:anonymousAuthentication enabled="true"'
+      - 'c:%systemroot%\system32\inetsrv\appcmd list config -section:anonymousAuthentication -> r:anonymousAuthentication enabled="true"'
 
   - id: 22005
     title: " Ensure WebDav feature is disabled"
