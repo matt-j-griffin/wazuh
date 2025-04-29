@@ -115,6 +115,9 @@ void* wm_database_main(wm_database *data) {
     // Manager name synchronization
     wm_sync_manager();
 
+    // Groups synchronization with the database
+    wdb_update_groups(SHAREDCFG_DIR, &wdb_wmdb_sock);
+
     // During the startup, both workers and master nodes should perform the
     // agents synchronization with the database using the keys. In advance,
     // the agent addition and removal from the database will be held by authd
@@ -122,9 +125,6 @@ void* wm_database_main(wm_database *data) {
 #ifndef LOCAL
     wm_sync_agents();
 #endif
-
-    // Groups synchronization with the database
-    wdb_update_groups(SHAREDCFG_DIR, &wdb_wmdb_sock);
 
     // Legacy agent-group files need to be synchronized with the database
     // and then removed in case an upgrade has just been performed.
@@ -302,6 +302,7 @@ void sync_keys_with_wdb(keystore *keys) {
     rb_tree *agents = NULL;
     char **ids = NULL;
     unsigned int i;
+    char * AGENT_GROUPS[] = { "default", NULL };
 
     agents = wdb_get_all_agents_rbtree(FALSE, &wdb_wmdb_sock);
 
@@ -321,8 +322,11 @@ void sync_keys_with_wdb(keystore *keys) {
             mtdebug2(WM_DATABASE_LOGTAG, "Synchronizing agent %s '%s'.", entry->id, entry->name);
 
             if (wdb_insert_agent(agent_id, entry->name, NULL, OS_CIDRtoStr(entry->ip, agent_cidr, IPSIZE) ?
-                                entry->ip->ip : agent_cidr, entry->raw_key, NULL, 1, &wdb_wmdb_sock)) {
+                                entry->ip->ip : agent_cidr, entry->raw_key, "default", 1, &wdb_wmdb_sock)) {
                 mtdebug1(WM_DATABASE_LOGTAG, "Couldn't insert agent '%s' in the database.", entry->id);
+            } else if (wdb_set_agent_groups(agent_id, AGENT_GROUPS, WDB_GROUP_MODE_OVERRIDE,
+                w_is_single_node(NULL) ? "synced" : "syncreq", &wdb_wmdb_sock) != OS_SUCCESS) {
+                mtdebug1(WM_DATABASE_LOGTAG, "Unable to set agent centralized group: default (internal error)");
             }
         }
     }
